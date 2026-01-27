@@ -37,9 +37,15 @@ A premium, responsive product catalog and booking system for building materials 
    ```
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Contact
-- **K.R. Gandhi**: [9944748140](tel:9944748140)
-- **Location**: Santhaipettai, Dindigul
+## Deployment
+
+This project is configured for one-click deployment to **Render.com** using the `render.yaml` blueprint.
+
+- **Service ID:** `srv-d5s746jlr7ts738o7crg`
+- **Dashboard:** [Render Dashboard](https://dashboard.render.com/web/srv-d5s746jlr7ts738o7crg)
+
+### Automatic Updates
+Every push to the `master` branch on GitHub will automatically trigger a new deployment on Render.
 
 ---
 *Built with ❤️ by Antigravity*

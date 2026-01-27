@@ -1,6 +1,6 @@
 window.App = {
     _initialized: false,
-    API_BASE_URL: window.location.port === '3000' ? '' : 'http://localhost:3000',
+    API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:3000' : window.location.origin,
     // Views
     views: {
         home: `
