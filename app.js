@@ -287,7 +287,7 @@ window.App = {
                     <h2 class="text-3xl font-bold text-center mb-8 font-display text-gray-900 dark:text-white">LOGIN</h2>
                     <form onsubmit="App.login(event)" class="space-y-6">
                         <div>
-                            <label class="block text-sm font-bold text-gray-500 mb-2">Username</label>
+                            <label class="block text-sm font-bold text-gray-500 mb-2">Username or Phone</label>
                             <input type="text" name="username" required class="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary">
                         </div>
                         <div>
@@ -311,6 +311,10 @@ window.App = {
                         <div>
                             <label class="block text-sm font-bold text-gray-500 mb-2">Username</label>
                             <input type="text" name="username" required class="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-500 mb-2">Phone Number</label>
+                            <input type="tel" name="phone" required class="w-full px-4 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary" placeholder="e.g. 9944748140">
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-500 mb-2">Password</label>
@@ -382,6 +386,7 @@ window.App = {
                                 <tr>
                                     <th class="px-6 py-4">ID</th>
                                     <th class="px-6 py-4">Username</th>
+                                    <th class="px-6 py-4">Phone</th>
                                     <th class="px-6 py-4">Role</th>
                                     <th class="px-6 py-4 text-right">Actions</th>
                                 </tr>
@@ -553,7 +558,7 @@ window.App = {
             });
             const data = await res.json();
             if (res.ok) {
-                this.currentUser = { username: data.username, role: data.role, token: data.token };
+                this.currentUser = { username: data.username, phone: data.phone, role: data.role, token: data.token };
                 localStorage.setItem('krg_user', JSON.stringify(this.currentUser));
                 alert("Login Successful!");
                 window.location.hash = '#/home';
@@ -570,13 +575,14 @@ window.App = {
     async register(e) {
         e.preventDefault();
         const username = e.target.username.value;
+        const phone = e.target.phone.value;
         const password = e.target.password.value;
 
         try {
             const res = await fetch(`${this.API_BASE_URL}/api/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password, phone })
             });
             const data = await res.json();
             if (res.ok) {
@@ -795,6 +801,9 @@ window.App = {
                                 </div>
                             </td>
                             <td class="px-6 py-4">
+                                <a href="tel:${user.phone}" class="text-sm text-primary hover:underline font-medium">${user.phone}</a>
+                            </td>
+                            <td class="px-6 py-4">
                                 <span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${user.role === 'admin' ? 'bg-orange-100 text-orange-600' : 'bg-gray-100 text-gray-600'}">
                                     ${user.role}
                                 </span>
@@ -830,6 +839,10 @@ window.App = {
                         <input name="username" required class="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary" />
                     </div>
                     <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1">Phone Number</label>
+                        <input name="phone" required class="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary" />
+                    </div>
+                    <div>
                         <label class="block text-xs font-bold text-gray-500 mb-1">Password</label>
                         <input name="password" type="password" required class="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary" />
                     </div>
@@ -861,6 +874,7 @@ window.App = {
                 body: JSON.stringify({
                     username,
                     password,
+                    phone: f.phone.value,
                     role,
                     adminRole: this.currentUser.role
                 })

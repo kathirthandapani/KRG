@@ -48,8 +48,18 @@ function initDb() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
             password TEXT,
+            phone TEXT UNIQUE,
             role TEXT DEFAULT 'user'
-        )`);
+        )`, (err) => {
+            if (!err) {
+                // Try to add phone column if it doesn't exist (for existing databases)
+                db.run("ALTER TABLE users ADD COLUMN phone TEXT UNIQUE", (err) => {
+                    if (err) {
+                        // Probably already exists
+                    }
+                });
+            }
+        });
 
         // Rates Table
         db.run(`CREATE TABLE IF NOT EXISTS rates (
@@ -104,12 +114,12 @@ function initDb() {
                         rateId: 1,
                         type: 'material',
                         name: 'Quality River Sand',
-                        description: 'Premium filtered sand for construction.',
+                        description: 'Premium filtered sand for construction foundations.',
                         price: '₹4,500',
                         unit: '/ Unit',
                         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBqvw2mM46N37gZmFMXVmL8EmXi8pLMB_vWwzjA1K7Hp9FW8dJcUf2Ww3oZpcSIaNLS4NOAaQYV2_q-C8LRy3xqjZUdo3NQT6nafjYvhQ14gPlBSaIpXirD94L68AbqQTCzn0_T9SSpfnyvpkJ_PYgwEgN3hhf7EWjrfAy2lTFUBP15Mt987f_4UJMGgYhsHEA-QtHaKokSQf43rqC6TnzkorgQZ2dKq1BoCzp3o6i_pJsFncjDcbbcng3Lq5Z7RoiLmTguDf4bd1w',
                         category: 'River Sand',
-                        badge_text: 'In Stock',
+                        badge_text: 'Best Seller',
                         badge_color: 'bg-green-500'
                     },
                     {
@@ -117,11 +127,37 @@ function initDb() {
                         rateId: 5,
                         type: 'material',
                         name: '20mm Blue Metal',
-                        description: 'High-grade crushed stone aggregates.',
+                        description: 'High-grade crushed stone aggregates for concrete.',
                         price: '₹3,200',
                         unit: '/ Unit',
                         image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDlJdluCHzwV8kCPY7XP06B6bWbPtOCSYry36lIII6_j89JaiR0AWzhLyTXt9kq-RK7LU2o0_EsiIXMg-bBJLj1Yu5Wvtl3jRZfFQXMxMQy7NOC85tnhj-ruz7oq5PWJnNX2kree3xYUASarGB5kQcfPbahPrTwjq-wkwqnZlksggpgbZQblr8h67Qb1m5zdbytkO2VldYgRlQCbzdF703fjVccNpf_E19m_58SLufFIsmAHg4dmW0vD_ghlherdYq-B06kPeCOcK4',
                         category: 'Aggregates',
+                        badge_text: '',
+                        badge_color: ''
+                    },
+                    {
+                        id: 'p3',
+                        rateId: 2,
+                        type: 'material',
+                        name: 'Premium M-Sand',
+                        description: 'High-quality manufactured sand for masonry works.',
+                        price: '₹3,800',
+                        unit: '/ Unit',
+                        image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop',
+                        category: 'River Sand',
+                        badge_text: 'Eco Friendly',
+                        badge_color: 'bg-blue-500'
+                    },
+                    {
+                        id: 'p4',
+                        rateId: 3,
+                        type: 'material',
+                        name: 'Red Bricks',
+                        description: 'Standard size burnt clay bricks for walls.',
+                        price: '₹8,500',
+                        unit: '/ 1000 Pcs',
+                        image: 'https://images.unsplash.com/photo-1582201942988-13e60e4556ee?q=80&w=800&auto=format&fit=crop',
+                        category: 'Cement',
                         badge_text: '',
                         badge_color: ''
                     }
@@ -161,7 +197,7 @@ function initDb() {
         db.get("SELECT count(*) as count FROM users WHERE role = 'admin'", (err, row) => {
             if (row && row.count === 0) {
                 bcrypt.hash('admin123', 10, (err, hash) => {
-                    db.run("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ['admin', hash, 'admin']);
+                    db.run("INSERT INTO users (username, password, phone, role) VALUES (?, ?, ?, ?)", ['admin', hash, '9944748140', 'admin']);
                     console.log('Admin seeded: admin / admin123');
                 });
             }
@@ -171,7 +207,7 @@ function initDb() {
         db.get("SELECT count(*) as count FROM users WHERE username = 'tester'", (err, row) => {
             if (row && row.count === 0) {
                 bcrypt.hash('tester123', 10, (err, hash) => {
-                    db.run("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", ['tester', hash, 'user']);
+                    db.run("INSERT INTO users (username, password, phone, role) VALUES (?, ?, ?, ?)", ['tester', hash, '9994932660', 'user']);
                     console.log('User seeded: tester / tester123');
                 });
             }
@@ -183,17 +219,18 @@ function initDb() {
 
 // Register
 app.post('/api/register', (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
+    const { username, password, phone } = req.body;
+    if (!username || !password || !phone) return res.status(400).json({ error: 'Missing fields' });
 
     const saltRounds = 10;
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) return res.status(500).json({ error: 'Server error' });
 
-        db.run("INSERT INTO users (username, password) VALUES (?, ?)", [username, hash], function (err) {
+        db.run("INSERT INTO users (username, password, phone) VALUES (?, ?, ?)", [username, hash, phone], function (err) {
             if (err) {
                 if (err.message.includes('UNIQUE constraint failed')) {
-                    return res.status(400).json({ error: 'Username already exists' });
+                    if (err.message.includes('username')) return res.status(400).json({ error: 'Username already exists' });
+                    if (err.message.includes('phone')) return res.status(400).json({ error: 'Phone number already registered' });
                 }
                 return res.status(500).json({ error: err.message });
             }
@@ -204,8 +241,8 @@ app.post('/api/register', (req, res) => {
 
 // Login
 app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
+    const { username, password } = req.body; // username can be username or phone
+    db.get("SELECT * FROM users WHERE username = ? OR phone = ?", [username, username], (err, user) => {
         if (err || !user) return res.status(401).json({ error: 'Invalid credentials' });
 
         bcrypt.compare(password, user.password, (err, result) => {
@@ -213,6 +250,7 @@ app.post('/api/login', (req, res) => {
                 res.json({
                     message: 'Login successful',
                     username: user.username,
+                    phone: user.phone,
                     role: user.role,
                     token: 'dummy-token-' + Date.now()
                 });
@@ -439,7 +477,7 @@ app.get('/api/admin/users', (req, res) => {
     const { role } = req.query;
     if (role !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
 
-    db.all("SELECT id, username, role FROM users", [], (err, rows) => {
+    db.all("SELECT id, username, phone, role FROM users", [], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
@@ -447,21 +485,22 @@ app.get('/api/admin/users', (req, res) => {
 
 // Admin: Add User
 app.post('/api/admin/users', (req, res) => {
-    const { username, password, role: newRole, adminRole } = req.body;
+    const { username, password, phone, role: newRole, adminRole } = req.body;
 
     if (adminRole !== 'admin') return res.status(403).json({ error: 'Unauthorized' });
-    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
+    if (!username || !password || !phone) return res.status(400).json({ error: 'Missing fields' });
 
     const saltRounds = 10;
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) return res.status(500).json({ error: 'Server error' });
 
-        db.run("INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
-            [username, hash, newRole || 'user'],
+        db.run("INSERT INTO users (username, password, phone, role) VALUES (?, ?, ?, ?)",
+            [username, hash, phone, newRole || 'user'],
             function (err) {
                 if (err) {
                     if (err.message.includes('UNIQUE constraint failed')) {
-                        return res.status(400).json({ error: 'Username already exists' });
+                        if (err.message.includes('username')) return res.status(400).json({ error: 'Username already exists' });
+                        if (err.message.includes('phone')) return res.status(400).json({ error: 'Phone number already registered' });
                     }
                     return res.status(500).json({ error: err.message });
                 }
