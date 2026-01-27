@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRG Building Materials & Earth Movers | Antigravity</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#FF9500",
+                        "surface-dark": "#3D3D3D",
+                        "surface-light": "#FFFFFF",
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#1C1917",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        display: ["Oswald", "sans-serif"],
+                    },
+                },
+            },
+        };
+
+        // Theme Management
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // View Management / Routing
+        const routes = {
+            '#/home': 'home-view',
+            '#/catalog': 'catalog-view',
+            '#/today-rates': 'today-rates-view',
+            '#/dashboard': 'dashboard-view',
+            '#/orders': 'orders-view',
+            '#/history': 'history-view',
+            '#/users': 'users-view',
+            '#/login': 'login-view',
+            '#/register': 'register-view'
+        };
+
+        function navigate() {
+            const hash = window.location.hash || '#/home';
+            const viewId = routes[hash] || 'home-view';
+
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            const activeView = document.getElementById(viewId);
+            if (activeView) {
+                activeView.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+
+            // Let App handle the specific view logic
+            if (window.App && typeof App.render === 'function') {
+                App.render();
+            }
+
+            // Update Nav Active States
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('text-primary', link.getAttribute('href') === hash);
+                link.classList.toggle('text-gray-400', link.getAttribute('href') !== hash);
+            });
+        }
+
+        window.addEventListener('hashchange', navigate);
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+
+            // Check if App is loaded and initialize if it hasn't been yet
+            if (window.App && typeof App.init === 'function') {
+                if (!App._initialized) {
+                    App.init();
+                }
+            } else {
+                navigate();
+            }
+        });
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 antialiased selection:bg-primary selection:text-black">
+
+    <!-- Top Navigation (Desktop) -->
+    <nav class="sticky top-0 z-50 glass border-b border-gray-200 dark:border-gray-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="w-10 h-10 bg-primary flex items-center justify-center rounded text-black font-display font-bold text-xl tracking-tighter shadow-lg">
+                        KRG
+                    </div>
+                    <div class="hidden sm:flex flex-col">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="font-display font-bold text-lg leading-none tracking-tight text-gray-900 dark:text-white uppercase">KRG</span>
+                            <div id="api-status"
+                                class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-[10px] font-bold text-red-600 dark:text-red-400 transition-all duration-500">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                                OFFLINE
+                            </div>
+                            <a href="tel:9944748140"
+                                class="flex items-center gap-1 px-3 py-1 bg-primary text-black text-[10px] font-bold rounded-full hover:bg-orange-600 transition-colors">
+                                <span class="material-icons-round text-xs">phone</span>
+                                CALL NOW
+                            </a>
+                        </div>
+                        <span class="text-[0.6rem] font-bold text-primary tracking-widest uppercase">Materials & Earth
+                            Movers</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#/home" class="nav-link font-medium transition-colors hover:text-primary">Home</a>
+                    <a href="#/catalog" class="nav-link font-medium transition-colors hover:text-primary">Catalog</a>
+                    <a href="#/today-rates" class="nav-link font-medium transition-colors hover:text-primary">Today
+                        Rates</a>
+                    <a href="#/dashboard"
+                        class="nav-link font-medium transition-colors hover:text-primary">Dashboard</a>
+                    <a href="#/history" id="nav-history"
+                        class="nav-link font-medium transition-colors hover:text-primary hidden">History</a>
+                    <a href="#/users" id="nav-users"
+                        class="nav-link font-medium transition-colors hover:text-primary hidden">Users</a>
+                    <a href="#/login" id="nav-login"
+                        class="nav-link font-medium transition-colors hover:text-primary">Login</a>
+                    <a href="#/register" id="nav-register"
+                        class="nav-link font-medium transition-colors hover:text-primary">Register</a>
+                    <a href="#" id="nav-logout" onclick="App.logout()"
+                        class="nav-link font-medium transition-colors hover:text-red-500 hidden">Logout</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleDarkMode()"
+                        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-600 dark:text-gray-300">
+                        <span class="material-icons-round dark:hidden">dark_mode</span>
+                        <span class="material-icons-round hidden dark:block text-yellow-400">light_mode</span>
+                    </button>
+                    <button class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-primary">
+                        <span class="material-icons-round text-3xl">menu</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="view-container">
+        <!-- Home View -->
+        <div id="home-view" class="view active">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <div class="flex flex-col items-center justify-center py-20 text-gray-500 gap-4">
+                    <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    <p class="font-medium">Initializing Premium Catalog...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Catalog View -->
+        <div id="catalog-view" class="view">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <p class="text-center py-20 text-gray-500">Loading Product Catalog...</p>
+            </div>
+        </div>
+
+        <!-- Today Rates View -->
+        <div id="today-rates-view" class="view">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <p class="text-center py-20 text-gray-500">Loading Today Rates...</p>
+            </div>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboard-view" class="view">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <p class="text-center py-20 text-gray-500">Loading Client Dashboard...</p>
+            </div>
+        </div>
+
+        <!-- Order Tracking View -->
+        <div id="orders-view" class="view">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <p class="text-center py-20 text-gray-500">Loading Order Tracking...</p>
+            </div>
+        </div>
+
+        <!-- History View -->
+        <div id="history-view" class="view">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <p class="text-center py-20 text-gray-500">Loading History...</p>
+            </div>
+        </div>
+
+        <!-- Users View -->
+        <div id="users-view" class="view">
+            <div class="max-w-7xl mx-auto px-4 py-8">
+                <p class="text-center py-20 text-gray-500">Loading Users...</p>
+            </div>
+        </div>
+
+        <!-- Login View -->
+        <div id="login-view" class="view"></div>
+
+        <!-- Register View -->
+        <div id="register-view" class="view"></div>
+    </main>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav
+        class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800 z-50">
+        <div class="flex justify-around items-center h-16 px-4">
+            <a href="#/home"
+                class="nav-link flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                <span class="material-icons-round">home</span>
+                <span class="text-[10px] font-medium mt-1">Home</span>
+            </a>
+            <a href="#/catalog"
+                class="nav-link flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                <span class="material-icons-round">category</span>
+                <span class="text-[10px] font-medium mt-1">Catalog</span>
+            </a>
+            <a href="#/today-rates"
+                class="nav-link flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                <span class="material-icons-round">trending_up</span>
+                <span class="text-[10px] font-medium mt-1">Rates</span>
+            </a>
+            <a href="#/dashboard"
+                class="nav-link flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                <span class="material-icons-round">dashboard</span>
+                <span class="text-[10px] font-medium mt-1">Dashboard</span>
+            </a>
+            <a href="#/users" id="nav-users-mobile"
+                class="nav-link hidden flex flex-col items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                <span class="material-icons-round">people</span>
+                <span class="text-[10px] font-medium mt-1">Users</span>
+            </a>
+        </div>
+    </nav>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

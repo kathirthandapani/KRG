@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KRG Building Materials App</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#DC2626", // Brick Red inspired by KRG Logo
+                        "background-light": "#F3F4F6", // Cool gray/white
+                        "background-dark": "#0F172A", // Slate dark
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem", // 12px
+                        'xl': "1rem",      // 16px
+                        '2xl': "1.5rem",   // 24px
+                    },
+                },
+            },
+        };
+    </script>
+<style>.no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 font-sans antialiased min-h-screen pb-24">
+<div class="sticky top-0 z-50 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md px-6 py-2 flex justify-between items-center text-xs font-medium">
+<span>9:41</span>
+<div class="flex space-x-1.5">
+<span class="material-icons text-sm">signal_cellular_alt</span>
+<span class="material-icons text-sm">wifi</span>
+<span class="material-icons text-sm">battery_full</span>
+</div>
+</div>
+<header class="px-6 pt-2 pb-4">
+<div class="flex justify-between items-center mb-4">
+<div>
+<p class="text-xs text-gray-500 dark:text-gray-400 font-medium tracking-wide uppercase">Santhaipettai, Dindigul</p>
+<h1 class="text-2xl font-bold text-primary flex items-center gap-2">
+<span class="material-icons">roofing</span> KRG Materials
+                </h1>
+</div>
+<button class="relative p-2 rounded-full bg-white dark:bg-gray-800 shadow-sm text-gray-600 dark:text-gray-300">
+<span class="material-icons">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border border-white dark:border-gray-800"></span>
+</button>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-icons text-gray-400">search</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3 border-none rounded-2xl leading-5 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary shadow-sm transition-all" placeholder="Search sand, bricks, or trucks..." type="text"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+<button class="p-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-500 dark:text-gray-300">
+<span class="material-icons text-sm">tune</span>
+</button>
+</div>
+</div>
+</header>
+<nav class="mb-6">
+<ul class="flex overflow-x-auto space-x-3 px-6 pb-2 no-scrollbar">
+<li class="flex-shrink-0">
+<button class="px-5 py-2.5 bg-primary text-white rounded-xl text-sm font-semibold shadow-md shadow-primary/30">
+                    All
+                </button>
+</li>
+<li class="flex-shrink-0">
+<button class="px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700 rounded-xl text-sm font-medium whitespace-nowrap">
+                    River Sand
+                </button>
+</li>
+<li class="flex-shrink-0">
+<button class="px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700 rounded-xl text-sm font-medium whitespace-nowrap">
+                    Aggregates
+                </button>
+</li>
+<li class="flex-shrink-0">
+<button class="px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700 rounded-xl text-sm font-medium whitespace-nowrap">
+                    Cement
+                </button>
+</li>
+<li class="flex-shrink-0">
+<button class="px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-gray-700 rounded-xl text-sm font-medium whitespace-nowrap">
+                    Rentals
+                </button>
+</li>
+</ul>
+</nav>
+<main class="px-6 space-y-8">
+<section>
+<div class="flex justify-between items-end mb-4">
+<h2 class="text-lg font-bold text-gray-900 dark:text-white">Materials Stock</h2>
+<a class="text-primary text-sm font-medium hover:underline" href="#">See all</a>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white dark:bg-surface-dark rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+<div class="relative h-32 w-full mb-3 rounded-xl overflow-hidden bg-gray-100">
+<img alt="River Sand Pile" class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqvw2mM46N37gZmFMXVmL8EmXi8pLMB_vWwzjA1K7Hp9FW8dJcUf2Ww3oZpcSIaNLS4NOAaQYV2_q-C8LRy3xqjZUdo3NQT6nafjYvhQ14gPlBSaIpXirD94L68AbqQTCzn0_T9SSpfnyvpkJ_PYgwEgN3hhf7EWjrfAy2lTFUBP15Mt987f_4UJMGgYhsHEA-QtHaKokSQf43rqC6TnzkorgQZ2dKq1BoCzp3o6i_pJsFncjDcbbcng3Lq5Z7RoiLmTguDf4bd1w"/>
+<span class="absolute top-2 left-2 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">In Stock</span>
+</div>
+<div class="flex-1">
+<h3 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-1">Quality River Sand</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Per Unit (Load)</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="font-bold text-gray-900 dark:text-white">₹4,500</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-red-700 transition-colors">
+<span class="material-icons text-sm">add</span>
+</button>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+<div class="relative h-32 w-full mb-3 rounded-xl overflow-hidden bg-gray-100">
+<img alt="Blue Metal Aggregates" class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlJdluCHzwV8kCPY7XP06B6bWbPtOCSYry36lIII6_j89JaiR0AWzhLyTXt9kq-RK7LU2o0_EsiIXMg-bBJLj1Yu5Wvtl3jRZfFQXMxMQy7NOC85tnhj-ruz7oq5PWJnNX2kree3xYUASarGB5kQcfPbahPrTwjq-wkwqnZlksggpgbZQblr8h67Qb1m5zdbytkO2VldYgRlQCbzdF703fjVccNpf_E19m_58SLufFIsmAHg4dmW0vD_ghlherdYq-B06kPeCOcK4"/>
+</div>
+<div class="flex-1">
+<h3 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-1">20mm Blue Metal</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Per Unit</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="font-bold text-gray-900 dark:text-white">₹3,200</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-red-700 transition-colors">
+<span class="material-icons text-sm">add</span>
+</button>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+<div class="relative h-32 w-full mb-3 rounded-xl overflow-hidden bg-gray-100">
+<img alt="Red Clay Bricks" class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF7yA6MWJfqaBftpZ1-sl9-lyP5eUWdB7m8papF7mSEedrwkBUVM7Nz4gkjPj3kJrtO8JhpBwuk-rnwbs1u0aOiJENxFz0oeU9IK1FhESLY-F1sE3_-qC98epqBS4Zlrl3o_AIpnTH1swwuiQ586gDFckCZ7Nc3xPerNYqNu545ptSfkuIwYTga1dGhwUuyjtHd3CvnwkY0FK-G-zipbY-8IEHsDVoxcImC0BpG5cmdwKd7AMdArCf7KdoE5hPNNraXR3Y5xgx5IM"/>
+</div>
+<div class="flex-1">
+<h3 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-1">Red Wire-cut Bricks</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Per Piece</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="font-bold text-gray-900 dark:text-white">₹12.50</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-red-700 transition-colors">
+<span class="material-icons text-sm">add</span>
+</button>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-2xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col">
+<div class="relative h-32 w-full mb-3 rounded-xl overflow-hidden bg-gray-100">
+<img alt="Cement Bags" class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfPEuRT3qoMzTNEUp2rXVVMqIzRE09krpMHFwtYvo3pTsJY6upaAO-UXK_p2bFWNBR8gQVwEIsQ2hcBWVUj1iLn6Emq7tFwgUjoOudrerGJ7G1j8UnKeydS2kjmPfDpfxMSYgsKRG3hKNr55hIRB7wW1ad2m0yzB0J7HpWqifi4OWWhZTjgOQOkXPO1C__xe9AtQ2j7lJfThT3JssFmo-9UKkqgEuXqscnX1Io8OnEEvme8R0Hw6FRSUu1tdETr5Jf1cjyhA6uSCk"/>
+</div>
+<div class="flex-1">
+<h3 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-1">Ultratech Cement</h3>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Per Bag (50kg)</p>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<span class="font-bold text-gray-900 dark:text-white">₹410</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-red-700 transition-colors">
+<span class="material-icons text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 p-1.5 rounded-lg">
+<span class="material-icons text-lg">agriculture</span>
+</span>
+<h2 class="text-lg font-bold text-gray-900 dark:text-white">Earth Movers &amp; Rentals</h2>
+</div>
+<div class="space-y-4">
+<div class="bg-white dark:bg-surface-dark rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-row gap-4">
+<div class="w-24 h-24 flex-shrink-0 bg-gray-100 rounded-xl overflow-hidden">
+<img alt="Tipper Lorry" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3PcsjQAmUD0-J1rA49pQtZrVRo4nUN3xSqX9IUf2P5uvQYdrV94DOwOU50ZG1WuvHKuET7MD-IW5e7eYzHUwYP6y092hhB8ul8kSKpQdGKibFa_MP3SWGAhZ64ymddh_qRjMwl0E2M9u4fSlPQAz0ahG3ZpHQjymQjNamnLNd39YphkNEhK4NY6O-atr2mR-vHbK9P3XKEpoP5FfgBUxOBqcwmjWkuQG_BNjAkoCpsWewAl_woWtaSBfbHq27xX9SwiL2K6nBLZo"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-gray-900 dark:text-white">Tipper Lorry (6 Unit)</h3>
+<span class="text-xs font-semibold bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-1 rounded">Heavy</span>
+</div>
+<div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+<span class="flex items-center gap-1"><span class="material-icons text-[14px]">speed</span> 240 HP</span>
+<span class="flex items-center gap-1"><span class="material-icons text-[14px]">fitness_center</span> 18 Ton</span>
+</div>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="text-sm font-bold text-primary">₹1,200 <span class="text-xs text-gray-400 font-normal">/hour</span></span>
+<button class="text-xs font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-3 py-1.5 rounded-lg">Check Availability</button>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-surface-dark rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-row gap-4">
+<div class="w-24 h-24 flex-shrink-0 bg-gray-100 rounded-xl overflow-hidden">
+<img alt="JCB Excavator" class="object-cover w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdjD-rtiBJ4MlVTDJJNJsL1nCjeU9Ic3xeOqLvfLtTKAnyAfin1PeSFRLvBj2cjWr6h1N96segDBG4wwAQhkg3HkEqJf-nzCKG6IG4tXoKKOTKm1AOcImJdVVO2YvZETAAjJfjs9Ia45OgRSAitrFgjGFya5Ql5FC8egj0Kt5_Nv9_x4byqzCr8957B05rjrLnYR3xWUxu73d3_Tmy8VzcTQai4GD3BT-brcARi_aIo0wWQv66GZM4uKL8bWXzEtB1zRXWpOWyv1I"/>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-bold text-gray-900 dark:text-white">JCB Backhoe</h3>
+<span class="text-xs font-semibold bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-2 py-1 rounded">Versatile</span>
+</div>
+<div class="mt-2 flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+<span class="flex items-center gap-1"><span class="material-icons text-[14px]">speed</span> 74 HP</span>
+<span class="flex items-center gap-1"><span class="material-icons text-[14px]">archive</span> 1.0 m³</span>
+</div>
+</div>
+<div class="flex justify-between items-end mt-2">
+<span class="text-sm font-bold text-primary">₹950 <span class="text-xs text-gray-400 font-normal">/hour</span></span>
+<button class="text-xs font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-3 py-1.5 rounded-lg">Check Availability</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-5 text-white shadow-lg mb-8 relative overflow-hidden">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
+<h3 class="text-lg font-bold mb-1">Need specific requirements?</h3>
+<p class="text-gray-300 text-sm mb-4">Contact our proprietors directly for bulk orders.</p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+<span class="material-icons text-sm">person</span>
+</div>
+<div>
+<p class="text-sm font-semibold">K.R. Gandhi</p>
+<p class="text-xs text-gray-400">99949 32660</p>
+</div>
+<button class="ml-auto bg-green-600 p-2 rounded-full hover:bg-green-500 transition">
+<span class="material-icons text-white text-sm">call</span>
+</button>
+</div>
+<div class="w-full h-px bg-white/10"></div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+<span class="material-icons text-sm">person</span>
+</div>
+<div>
+<p class="text-sm font-semibold">G. Ramesh</p>
+<p class="text-xs text-gray-400">99447 48140</p>
+</div>
+<button class="ml-auto bg-green-600 p-2 rounded-full hover:bg-green-500 transition">
+<span class="material-icons text-white text-sm">call</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 bg-white dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800 pb-safe pt-2 px-6 z-40">
+<div class="flex justify-between items-center h-16">
+<button class="flex flex-col items-center justify-center text-primary w-12">
+<span class="material-icons">home</span>
+<span class="text-[10px] font-medium mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 w-12 hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-icons">category</span>
+<span class="text-[10px] font-medium mt-1">Catalog</span>
+</button>
+<div class="relative -top-6">
+<button class="w-14 h-14 bg-primary text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transform hover:scale-105 transition-transform">
+<span class="material-icons">shopping_cart</span>
+</button>
+</div>
+<button class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 w-12 hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-icons">receipt_long</span>
+<span class="text-[10px] font-medium mt-1">Orders</span>
+</button>
+<button class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 w-12 hover:text-gray-600 dark:hover:text-gray-300">
+<span class="material-icons">person</span>
+<span class="text-[10px] font-medium mt-1">Profile</span>
+</button>
+</div>
+</nav>
+<div class="h-6 w-full bg-white dark:bg-surface-dark fixed bottom-0 z-50"></div>
+
+</body></html>
