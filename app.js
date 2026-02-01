@@ -25,17 +25,6 @@ window.App = {
                 </div>
             </header>
 
-            <div class="bg-gray-900 text-white py-3 px-4 flex justify-between items-center text-xs overflow-x-auto whitespace-nowrap gap-4 border-b border-gray-800">
-                <div class="flex items-center gap-1">
-                    <span class="material-icons-round text-primary text-sm">person</span>
-                    <span class="font-bold text-gray-400">K.R. Gandhi</span>
-                </div>
-                <div class="flex items-center gap-1">
-                    <span class="material-icons-round text-primary text-sm">person</span>
-                    <span class="font-bold text-gray-400">G. Ramesh</span>
-                </div>
-            </div>
-
             <section class="max-w-7xl mx-auto px-6 py-16">
                 <div class="flex items-center justify-between mb-10">
                     <h2 class="font-display font-bold text-4xl uppercase text-gray-900 dark:text-white">
