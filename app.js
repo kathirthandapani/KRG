@@ -6,8 +6,8 @@ window.App = {
         home: `
             <header class="relative w-full h-[70vh] sm:h-[80vh] md:h-[600px] flex items-center justify-center overflow-hidden">
                 <div class="absolute inset-0 z-0">
-                    <img alt="Construction Site" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2000&auto=format&fit=crop"/>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60"></div>
+                    <img alt="KRG Building Materials" class="w-full h-full object-cover" src="assets/hero-bg.png"/>
+                    <div class="absolute inset-0 bg-black/30"></div>
                 </div>
                 
                 <div class="relative z-10 w-full max-w-7xl mx-auto px-6 text-center pt-20">
