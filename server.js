@@ -529,10 +529,20 @@ app.post('/api/admin/sync', (req, res) => {
 
     console.log('[ADMIN] Starting GitHub Sync/Push...');
 
-    exec('git add . && git commit -m "Admin UI Sync Update" && git push origin main', (err, stdout, stderr) => {
+    // Improved command: 
+    // 1. Pull latest changes
+    // 2. Add all files
+    // 3. Commit only if there are changes (|| echo handles no changes)
+    // 4. Push to main
+    const cmd = 'git pull origin main && git add . && (git commit -m "Admin UI Sync Update" || echo "no changes to commit") && git push origin main';
+
+    exec(cmd, (err, stdout, stderr) => {
         if (err) {
-            console.error('[GIT ERROR]', stderr);
-            return res.status(500).json({ error: 'Git Sync Failed', details: stderr });
+            console.error('[GIT ERROR]', stderr || err.message);
+            // Even if there's an error, if push worked or pull was successful it might be ok, 
+            // but we treat any non-zero exit as failure unless we handle it.
+            // git push might fail if there's nothing to push too.
+            return res.status(500).json({ error: 'Git Sync Failed', details: stderr || err.message });
         }
         console.log('[GIT SUCCESS]', stdout);
         res.json({ message: 'GitHub Sync Successful!', output: stdout });
