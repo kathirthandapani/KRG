@@ -32,6 +32,18 @@ app.get('/health', (req, res) => {
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+// Explicit routes for sub-project module previews
+app.get('/dashboard-preview', (req, res) => {
+    res.sendFile(path.join(__dirname, 'KRG', 'client_dashboard', 'code.html'));
+});
+app.get('/landing-preview', (req, res) => {
+    res.sendFile(path.join(__dirname, 'KRG', 'krg_landing_page', 'code.html'));
+});
+app.get('/catalog-preview', (req, res) => {
+    res.sendFile(path.join(__dirname, 'KRG', 'product_catalog_&_equipment_rental', 'code.html'));
+});
+
 app.use(express.static('.')); // Serve static files from current directory
 
 // Database Setup
@@ -373,7 +385,26 @@ app.get('/api/bookings', (req, res) => {
 
 // Get Products
 app.get('/api/products', (req, res) => {
-    db.all("SELECT * FROM products", [], (err, rows) => {
+    const { category } = req.query;
+    if (category && category !== 'All') {
+        db.all("SELECT * FROM products WHERE category = ?", [category], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows);
+        });
+    } else {
+        db.all("SELECT * FROM products", [], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows);
+        });
+    }
+});
+
+// Search Products
+app.get('/api/products/search', (req, res) => {
+    const { q } = req.query;
+    if (!q) return res.json([]);
+    const query = `%${q}%`;
+    db.all("SELECT * FROM products WHERE name LIKE ? OR category LIKE ? OR description LIKE ?", [query, query, query], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);
     });
@@ -408,19 +439,24 @@ app.delete('/api/products/:id', (req, res) => {
     });
 });
 
+// Helper to normalize phone numbers for OTP
+function normalizePhoneForOTP(rawPhone) {
+    if (!rawPhone) return null;
+    let digits = rawPhone.replace(/\D/g, '');
+    if (digits.length === 10) return '+91' + digits;
+    if (rawPhone.startsWith('+')) return '+' + digits;
+    // Default to adding + if missing
+    return '+' + digits;
+}
+
 // OTP Generation
 app.post('/api/otp/send', (req, res) => {
     const { phone: rawPhone } = req.body;
     if (!rawPhone) return res.status(400).json({ error: 'Phone number required' });
 
-    let phone = rawPhone.replace(/\D/g, ''); // Sanitize: keep only digits
-    if (phone.length < 10) return res.status(400).json({ error: 'Invalid phone number format' });
-
-    // Ensure E.164 format for India (Default to +91 if missing)
-    if (phone.length === 10) {
-        phone = '+91' + phone;
-    } else if (!phone.startsWith('+')) {
-        phone = '+' + phone;
+    const phone = normalizePhoneForOTP(rawPhone);
+    if (!phone || phone.length < 11) {
+        return res.status(400).json({ error: 'Invalid phone number format' });
     }
 
     const code = Math.floor(1000 + Math.random() * 9000).toString();
@@ -428,14 +464,14 @@ app.post('/api/otp/send', (req, res) => {
 
     console.log(`\n==================================================`);
     console.log(`[SENDING REAL SMS VIA TWILIO]`);
-    console.log(`TO: ${rawPhone}`);
+    console.log(`TO: ${phone} (Normalized from: ${rawPhone})`);
     console.log(`CODE: [ ${code} ]`);
     console.log(`==================================================\n`);
 
     // Send Real SMS via Twilio
     client.messages.create({
         body: `Your KRG Building Materials verification code is: ${code}`,
-        to: rawPhone,
+        to: phone,
         from: TWILIO_PHONE_NUMBER,
     })
         .then((message) => {
@@ -453,12 +489,13 @@ app.post('/api/otp/verify', (req, res) => {
     const { phone: rawPhone, code } = req.body;
     if (!rawPhone || !code) return res.status(400).json({ error: 'Phone and code required' });
 
-    const phone = rawPhone.replace(/\D/g, ''); // Sanitize: keep only digits
-    if (otps[phone] === code) {
+    const phone = normalizePhoneForOTP(rawPhone);
+    if (otps[phone] && otps[phone] === code) {
         delete otps[phone]; // Clear after use
         res.json({ message: 'OTP verified successfully' });
     } else {
-        res.status(400).json({ error: 'Invalid OTP code' });
+        console.log(`[VERIFY FAIL] Expected ${otps[phone]} but got ${code} for ${phone}`);
+        res.status(400).json({ error: 'Invalid OTP code or expired' });
     }
 });
 
