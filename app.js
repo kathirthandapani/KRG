@@ -1,6 +1,12 @@
 window.App = {
     _initialized: false,
-    API_BASE_URL: window.location.protocol === 'file:' ? 'http://localhost:3000' : '',
+    API_BASE_URL: (function () {
+        if (window.location.protocol === 'file:') return 'http://localhost:3000';
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') return '';
+        // If we are on a subpath (like GitHub Pages), we might need to point to a real backend.
+        // For now, default to relative, but provide a way to detect if we're on a known static host.
+        return '';
+    })(),
     // Views
     views: {
         home: `
@@ -214,9 +220,6 @@ window.App = {
                             <div class="flex flex-col gap-2">
                                 <a href="tel:9944748140" class="w-full py-3 bg-black/20 text-black font-bold rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-black/30 transition-all">
                                     <span class="material-icons-round text-sm">person</span> Call K.R. Gandhi
-                                </a>
-                                <a href="tel:9245555687" class="w-full py-3 bg-black/20 text-black font-bold rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-black/30 transition-all">
-                                    <span class="material-icons-round text-sm">person</span> Call Site Support
                                 </a>
                             </div>
                         </section>

@@ -4,13 +4,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const path = require('path');
-const twilio = require('twilio');
 
-// Twilio Configuration
-const TWILIO_ACCOUNT_SID = 'AC56733acf25a8df8b233e9ffe8b41edcd';
-const TWILIO_AUTH_TOKEN = 'b10fab4798a065aa37815c7113cc4e76';
-const TWILIO_PHONE_NUMBER = '+12297159583';
-const client = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
+
 const { exec } = require('child_process');
 
 // In-memory OTP storage for demo
@@ -468,20 +464,9 @@ app.post('/api/otp/send', (req, res) => {
     console.log(`CODE: [ ${code} ]`);
     console.log(`==================================================\n`);
 
-    // Send Real SMS via Twilio
-    client.messages.create({
-        body: `Your KRG Building Materials verification code is: ${code}`,
-        to: phone,
-        from: TWILIO_PHONE_NUMBER,
-    })
-        .then((message) => {
-            console.log(`[TWILIO SUCCESS] Message SID: ${message.sid}`);
-            res.json({ message: 'OTP sent successfully to your phone!' });
-        })
-        .catch((error) => {
-            console.error(`[TWILIO ERROR]`, error);
-            res.status(500).json({ error: 'SMS Delivery Error', details: error.message });
-        });
+    // OTP logging only (Twilio removed)
+    console.log(`[OTP SENT] To: ${phone}, Code: ${code}`);
+    res.json({ message: 'OTP generated (logged to server console)' });
 });
 
 // OTP Verification
@@ -576,9 +561,6 @@ app.post('/api/admin/sync', (req, res) => {
     exec(cmd, (err, stdout, stderr) => {
         if (err) {
             console.error('[GIT ERROR]', stderr || err.message);
-            // Even if there's an error, if push worked or pull was successful it might be ok, 
-            // but we treat any non-zero exit as failure unless we handle it.
-            // git push might fail if there's nothing to push too.
             return res.status(500).json({ error: 'Git Sync Failed', details: stderr || err.message });
         }
         console.log('[GIT SUCCESS]', stdout);
@@ -586,6 +568,20 @@ app.post('/api/admin/sync', (req, res) => {
     });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running at http://0.0.0.0:${PORT}`);
+// Catch-all route for SPA - serves index.html for unknown paths
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.listen(PORT, '0.0.0.0', async () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+    // Automatically open browser in local development
+    if (process.env.NODE_ENV !== 'production') {
+        try {
+            const open = require('open');
+            await open(`http://localhost:${PORT}`);
+        } catch (err) {
+            console.log("Could not open browser automatically.");
+        }
+    }
 });
