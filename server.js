@@ -569,7 +569,7 @@ app.post('/api/admin/sync', (req, res) => {
 });
 
 // Catch-all route for SPA - serves index.html for unknown paths
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
